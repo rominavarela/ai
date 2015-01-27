@@ -2,7 +2,7 @@ package Generatrix;
 
 import java.util.ArrayList;
 
-import StateGraph.State;
+import Model.State;
 
 public class Generatrix {
 	
