@@ -1,12 +1,12 @@
 package StateGraph;
 
 @SuppressWarnings("rawtypes")
-public class Link {
+public class Link <T>{
 	
-	public Operator operator;
+	public T		operator;
 	public State	target;
 	
-	public Link(Operator op, State target)
+	public Link(T op, State target)
 	{
 		this.operator= op;
 		this.target= target;
