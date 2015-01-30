@@ -17,30 +17,29 @@ public class Generatrix {
 		this.states.add(new State<int[][]>(initialState));
 		
 		GenerateStates();
+		GenerateLinks();
+	}
+	
+	/**
+	 * Generate every combination of state.
+	 */
+	public void GenerateStates()
+	{
+		//TODO
 	}
 	
 	/**
 	 * Generate every state's links (it's neighbors and their operator).
 	 */
-	public void GenerateStates()
+	public void GenerateLinks()
 	{
 		for (State<int[][]> currState : states)
 		{
-			for (Operator currOperator : Operator.values())
+			for(Operator op: Operator.values())
 			{
-				if (isOperationValid(currState, currOperator))
-				{
-					// create the next state
-					State<int[][]> s = createState(currState, currOperator);
-					
-					// ensure the next state is not duplicated
-					s = repeatedState(s);
-					
-					// create the link to the new state 
-					// and add it to the original state
-					Link l = new Link(currOperator, s);
-					currState.links.add(l);
-				}
+				State<int[][]> transition= createState(currState, op);
+				if(transition!=null)
+					currState.links.add(new Link(op, transition));
 			}
 		}
 	}
@@ -52,14 +51,56 @@ public class Generatrix {
 	 * @param operatorToApply
 	 * @return
 	 */
-	public State<int[][]> createState(State<int[][]> newState, Operator operatorToApply)
+	public State<int[][]> createState(State<int[][]> state, Operator o)
 	{
-
-		int[][] newInfo = new int[][]{
-				{ 0, 1, 2 },
-				{ 3, 4, 5 },
-				{ 6, 7, 8 }
-		};
+		int[][] newInfo = new int[state.info.length][state.info.length];
+		
+		//Copy and Find the zero
+		int x=0,y=0;
+		for(int i=0; i< state.info.length; i++)
+		{
+			for(int j=0; j< state.info[i].length; j++)
+			{
+				newInfo[i][j]= state.info[i][j];
+				if(newInfo[i][j]==0)
+				{
+					x=i;
+					y=j;
+				}
+			}
+		}
+		
+		//Calculate new positions
+		int x2=x, y2=y;
+		switch(o)
+		{
+			case up:
+				x2--;
+				if(x2 < 0) return null;
+				break;
+				
+			case down:
+				x2++;
+				if(x2 >= newInfo[0].length) return null;
+				
+				break;
+				
+			case left:
+				y2--;
+				if(y2 < 0) return null;
+				
+				break;
+				
+			case right:
+				y2++;
+				if(y2 >= newInfo[0].length) return null;
+				
+				break;
+		}
+		
+		//Switch
+		newInfo[x][y]= newInfo[x2][y2];
+		newInfo[x2][y2]= state.info[x][y];
 		
 		return new State<int[][]>(newInfo); // TODO
 	}
@@ -122,5 +163,37 @@ public class Generatrix {
 				if (state1.info[i][j] != state2.info[i][j])
 					return false;
 		return true;
+	}
+	
+	public String toString(int nState)
+	{
+		State<int[][]> state = states.get(nState);
+		String 	s="State "+nState+"\n";
+		
+		for(int i=0; i< state.info.length; i++)
+		{
+			for(int ii=0; ii< state.info[i].length; ii++)
+				s+=(state.info[i][ii]+" ");
+			s+="\n";
+		}
+		
+		s+="\ntransitions:\n";
+		
+		for(Link l: state.links)
+		{
+			s+=l.operator+"\n";
+			int[][] info= (int[][]) l.target.info;
+			
+			for(int i=0; i< info.length; i++)
+			{
+				for(int ii=0; ii< info[i].length; ii++)
+					s+=(info[i][ii]+" ");
+				s+="\n";
+			}
+			
+			s+="\n";
+		}
+		
+		return s;
 	}
 }
