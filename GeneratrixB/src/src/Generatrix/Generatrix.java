@@ -39,8 +39,12 @@ public class Generatrix {
 			{
 				int[][] transition= createTransition(s, op);
 				//if the neighborn needs to be added to the list
-				if(transition!=null && statesMap.get(statesMap.get(transition))==null)
-					stack.add(transition);
+				if(transition!=null)
+				{
+					int hash= hashCode(transition);
+					if(!this.statesMap.containsKey(hash))
+						stack.add(transition);
+				}
 				
 				if(transition!=null)
 					state.links.add(new Link(op, hashCode(transition)));
@@ -238,8 +242,8 @@ public class Generatrix {
 		{
 			for(int ii=0; ii< stateInfo[i].length; ii++)
 			{
-				n+=stateInfo[i][ii];
 				n*=10;
+				n+=stateInfo[i][ii];
 			}
 		}
 		
