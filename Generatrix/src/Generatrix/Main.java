@@ -9,19 +9,19 @@ public class Main {
 		
 		operators.add("up");
 		operators.add("down");
-		operators.add("rigth");
+		operators.add("right");
 		operators.add("left");
 		
 		int[][] initialState = new int[][]{
-		{ 0, 1, 2 },
-		{ 3, 4, 5 },
-		{ 6, 7, 8 }
+				{ 0, 1, 2 },
+				{ 3, 4, 5 },
+				{ 6, 7, 8 }
 		};
 		
 		Generatrix theMatrix= new Generatrix(operators, initialState);
-		printArray((int[][]) theMatrix.state.info);
+		printArray((int[][]) theMatrix.states.get(0).info);
 		
-		}
+	}
 	
 	public static void printArray(int[][] a)
 	{

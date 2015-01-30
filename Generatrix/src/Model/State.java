@@ -1,6 +1,8 @@
 package Model;
+
 import java.util.ArrayList;
 
+@SuppressWarnings("rawtypes")
 public class State <T> {
 	public T info;
 	public ArrayList<Link> links;

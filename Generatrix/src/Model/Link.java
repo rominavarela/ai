@@ -1,4 +1,5 @@
 package Model;
+
 @SuppressWarnings("rawtypes")
 public class Link <T>{
 	public T	operator;
