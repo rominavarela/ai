@@ -24,15 +24,18 @@ public class Generatrix {
 	 */
 	public void GenerateLinks()
 	{
-		for (State<int[][]> currState : states)
+		for (int currStateIndex = 0; currStateIndex < states.size(); currStateIndex++)
 		{
+			State<int[][]> currState = states.get(currStateIndex);
 			for(Operator op: Operator.values())
 			{
 				if (isOperationValid(currState, op))
 				{
 					State<int[][]> transition= createState(currState, op);
+					//System.out.println(transition + "" + op);
 					if(transition!=null)
 					{
+						System.out.println(stateToString(transition));
 						// ensure the next state is not duplicated
 						transition = repeatedState(transition);
 						// this also inserts new states to the list
@@ -75,25 +78,23 @@ public class Generatrix {
 		switch(o)
 		{
 			case up:
+				x2++;
+				if(x2 >= newInfo[0].length) return null;
+				break;
+				
+			case down:
 				x2--;
 				if(x2 < 0) return null;
 				break;
 				
-			case down:
-				x2++;
-				if(x2 >= newInfo[0].length) return null;
-				
-				break;
-				
 			case left:
-				y2--;
-				if(y2 < 0) return null;
-				
+				y2++;
+				if(y2 >= newInfo[0].length) return null;
 				break;
 				
 			case right:
-				y2++;
-				if(y2 >= newInfo[0].length) return null;
+				y2--;
+				if(y2 < 0) return null;
 				
 				break;
 		}
@@ -191,6 +192,18 @@ public class Generatrix {
 				if (state1.info[i][j] != state2.info[i][j])
 					return false;
 		return true;
+	}
+	
+	public String stateToString(State<int[][]> state)
+	{
+		String s = "";
+		for(int i=0; i< state.info.length; i++)
+		{
+			for(int ii=0; ii< state.info[i].length; ii++)
+				s+=(state.info[i][ii]+" ");
+			s+="\n";
+		}
+		return s;
 	}
 	
 	public String toString(int nState)

@@ -11,7 +11,7 @@ public class Main {
 		
 		Generatrix theMatrix= new Generatrix(initialState);
 		System.out.println("N States: "+theMatrix.states.size());
-		System.out.println(theMatrix.toString(0));
+		//System.out.println(theMatrix.toString(0));
 		
 	}
 }
