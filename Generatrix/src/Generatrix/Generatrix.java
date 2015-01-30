@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Model.Link;
 import Model.State;
+import Model.Operator;
 
 public class Generatrix {
 	
@@ -23,21 +24,35 @@ public class Generatrix {
 	 */
 	public void GenerateStates()
 	{
-		// for each state in states,
-		//		for each operator
-		//			generate a new state with the operator
-		//			if new state is valid, add to state list
+		for (State<int[][]> currState : states)
+		{
+			for (Operator currOperator : Operator.values())
+			{
+				if (isOperationValid(currState, currOperator))
+				{
+					// create the next state
+					State<int[][]> s = createState(currState, currOperator);
+					
+					// ensure the next state is not duplicated
+					s = repeatedState(s);
+					
+					// create the link to the new state 
+					// and add it to the original state
+					Link l = new Link(currOperator, s);
+					currState.links.add(l);
+				}
+			}
+		}
 	}
 	
 	/**
-	 * generarEstado(operador, estado):estado 
-	 * Genera un estado que es el resultado de aplicar el operador al estado que mandamos
+	 * Generates a new state product of applying a transition to a received state.
 	 * 
 	 * @param newState
 	 * @param operatorToApply
 	 * @return
 	 */
-	public State<int[][]> createState(State<int[][]> newState, String operatorToApply)
+	public State<int[][]> createState(State<int[][]> newState, Operator operatorToApply)
 	{
 
 		int[][] newInfo = new int[][]{
@@ -50,19 +65,19 @@ public class Generatrix {
 	}
 	
 	/**
-	 * estadoValido(estado):boolean 
-	 * Regresa verdadero o falso si el estado es valido o inv�lido
+	 * Informs whether a transition is valid for a determined state.
 	 * 
 	 * @return
 	 */
-	public boolean isValidState(State<int[][]> toVerify)
+	public boolean isOperationValid(State<int[][]> toVerify, Operator operatorToApply)
 	{
 		return true; // TODO
 	}
 	
 	/**
-	 * estadoRepetido(estado):estado 
-	 * Regresa un estado; el m�smo si es un estado nuevo y el estado original si no es nuevo.
+	 * Searchs for the received state in the state list; 
+	 * reports it if found,
+	 * adds it to the list if it is not found.
 	 * 
 	 * @param newState
 	 * 
