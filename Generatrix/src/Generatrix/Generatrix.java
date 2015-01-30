@@ -16,16 +16,7 @@ public class Generatrix {
 		
 		this.states.add(new State<int[][]>(initialState));
 		
-		GenerateStates();
 		GenerateLinks();
-	}
-	
-	/**
-	 * Generate every combination of state.
-	 */
-	public void GenerateStates()
-	{
-		//TODO
 	}
 	
 	/**
@@ -37,9 +28,18 @@ public class Generatrix {
 		{
 			for(Operator op: Operator.values())
 			{
-				State<int[][]> transition= createState(currState, op);
-				if(transition!=null)
-					currState.links.add(new Link(op, transition));
+				if (isOperationValid(currState, op))
+				{
+					State<int[][]> transition= createState(currState, op);
+					if(transition!=null)
+					{
+						// ensure the next state is not duplicated
+						transition = repeatedState(transition);
+						// this also inserts new states to the list
+						
+						currState.links.add(new Link(op, transition));
+					}
+				}
 			}
 		}
 	}
@@ -102,7 +102,7 @@ public class Generatrix {
 		newInfo[x][y]= newInfo[x2][y2];
 		newInfo[x2][y2]= state.info[x][y];
 		
-		return new State<int[][]>(newInfo); // TODO
+		return new State<int[][]>(newInfo); 
 	}
 	
 	/**
