@@ -2,7 +2,6 @@ package Model;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("rawtypes")
 public class State <T> {
 	
 	public T				info;
@@ -11,6 +10,7 @@ public class State <T> {
 
 	public State(T info)
 	{
-		this.info=info;
+		this.info	= info;
+		this.links	= new ArrayList<Link>();
 	}
 }

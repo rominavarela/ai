@@ -1,12 +1,12 @@
 package Model;
 
 @SuppressWarnings("rawtypes")
-public class Link <T>{
+public class Link{
 	
-	public T		operator;
-	public State	target;
+	public Operator		operator;
+	public State		target;
 	
-	public Link(T op, State target)
+	public Link(Operator op, State target)
 	{
 		this.operator= op;
 		this.target= target;

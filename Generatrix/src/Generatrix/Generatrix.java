@@ -2,19 +2,18 @@ package Generatrix;
 
 import java.util.ArrayList;
 
+import Model.Link;
 import Model.State;
 
 public class Generatrix {
 	
 	public ArrayList<State<int[][]>>	states;
-	public ArrayList<String>			operators;
 	
-	public Generatrix(ArrayList<String> operators, int[][] initialState)
+	public Generatrix(int[][] initialState)
 	{		
 		this.states = new ArrayList<State<int[][]>>();
 		
 		this.states.add(new State<int[][]>(initialState));
-		this.operators	= operators;
 		
 		GenerateStates();
 	}
@@ -52,7 +51,7 @@ public class Generatrix {
 	
 	/**
 	 * estadoValido(estado):boolean 
-	 * Regresa verdadero o falso si el estado es valido o inválido
+	 * Regresa verdadero o falso si el estado es valido o invï¿½lido
 	 * 
 	 * @return
 	 */
@@ -63,7 +62,7 @@ public class Generatrix {
 	
 	/**
 	 * estadoRepetido(estado):estado 
-	 * Regresa un estado; el mísmo si es un estado nuevo y el estado original si no es nuevo.
+	 * Regresa un estado; el mï¿½smo si es un estado nuevo y el estado original si no es nuevo.
 	 * 
 	 * @param newState
 	 * 
