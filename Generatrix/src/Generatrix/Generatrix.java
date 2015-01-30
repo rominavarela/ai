@@ -112,11 +112,39 @@ public class Generatrix {
 	 */
 	public boolean isOperationValid(State<int[][]> toVerify, Operator operatorToApply)
 	{
-		return true; // TODO
+		switch(operatorToApply)
+		{
+		case up:
+			// 0 cannot be on the bottom row
+			for (int col = 0; col < toVerify.info[toVerify.info.length-1].length; col++)
+				if (toVerify.info[toVerify.info.length-1][col] == 0)
+					return false;
+			break;
+		case down:
+			// 0 cannot be on the top row
+			for (int col = 0; col < toVerify.info[0].length; col++)
+				if (toVerify.info[0][col] == 0)
+					return false;
+			break;
+		case left:
+			// 0 cannot be on the right column
+			for (int row = 0; row < toVerify.info.length; row++)
+				if (toVerify.info[row][toVerify.info[row].length-1] == 0)
+					return false;
+			break;
+		case right:
+			// 0 cannot be on the left column
+			for (int row = 0; row < toVerify.info.length; row++)
+				if (toVerify.info[row][0] == 0)
+					return false;
+			break;
+		}
+		
+		return true;
 	}
 	
 	/**
-	 * Searchs for the received state in the state list; 
+	 * Searches for the received state in the state list; 
 	 * reports it if found,
 	 * adds it to the list if it is not found.
 	 * 
