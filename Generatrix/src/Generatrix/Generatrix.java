@@ -58,7 +58,7 @@ public class Generatrix {
 	 */
 	public boolean isValidState(State<int[][]> toVerify)
 	{
-		return false; // TODO
+		return true; // TODO
 	}
 	
 	/**
@@ -66,13 +66,47 @@ public class Generatrix {
 	 * Regresa un estado; el mísmo si es un estado nuevo y el estado original si no es nuevo.
 	 * 
 	 * @param newState
-	 * @return
+	 * 
+	 * @return A reference to a state 
 	 */
-	public State<int[][]> isNewState(State<int[][]> newState)
+	public State<int[][]> repeatedState(State<int[][]> newState)
 	{
-		// iterar a través de la lista de estados; si está reportar el encontrado, 
-		// si no está, añadirlo a la lista y reportar el mismo
-		return states.get(0); // TODO
+		// begin search presuming new state
+		boolean exists = false;
+		State<int[][]> resultState = newState;
+		
+		// iterate through the state list;
+		// if it exists, report the existing and mark existence
+		for (State<int[][]> currState : states)
+			if (sameState(newState, currState)) 
+			{
+				resultState = currState;
+				exists = true;
+			}
+		
+		// if the new state was not found, add it to the state list
+		if (!exists)
+			states.add(newState);
+		
+		return resultState;
 	}
 	
+	/**
+	 * Compares two states according to their info.
+	 * 
+	 * @param state1 
+	 * 			First state to compare.
+	 * @param state2 
+	 * 			Second state to compare.
+	 * 
+	 * @return true if their info match, false otherwise.
+	 */
+	public boolean sameState(State<int[][]> state1, State<int[][]> state2)
+	{
+		for (int i = 0; i < state1.info.length; i++)
+			for (int j = 0; j < state1.info[i].length; j++)
+				if (state1.info[i][j] != state2.info[i][j])
+					return false;
+		return true;
+	}
 }
