@@ -1,6 +1,5 @@
 package Generatrix;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -11,14 +10,13 @@ import Model.Operator;
 public class Generatrix {
 	
 	public HashMap<Integer, State<int[][]>> statesMap;
-	public ArrayList<State<int[][]>> states= new ArrayList<State<int[][]>>();
+	public int initialState;
 	
 	public Generatrix(int[][] initialState)
 	{
 		this.statesMap = new HashMap<Integer, State<int[][]>>();
 		GenerateStates(initialState);
-		
-		states.addAll(statesMap.values());
+		this.initialState= hashCode(initialState);
 	}
 	
 	/**
@@ -83,26 +81,23 @@ public class Generatrix {
 		switch(o)
 		{
 			case up:
+				x2++;
+				if(x2 >= newInfo[0].length) return null;
+				break;
+				
+			case down:
 				x2--;
 				if(x2 < 0) return null;
 				break;
 				
-			case down:
-				x2++;
-				if(x2 >= newInfo[0].length) return null;
-				
-				break;
-				
 			case left:
-				y2--;
-				if(y2 < 0) return null;
-				
+				y2++;
+				if(y2 >= newInfo[0].length) return null;
 				break;
 				
 			case right:
-				y2++;
-				if(y2 >= newInfo[0].length) return null;
-				
+				y2--;
+				if(y2 < 0) return null;
 				break;
 		}
 		
@@ -152,37 +147,6 @@ public class Generatrix {
 	}
 	
 	/**
-	 * Searches for the received state in the state list; 
-	 * reports it if found,
-	 * adds it to the list if it is not found.
-	 * 
-	 * @param newState
-	 * 
-	 * @return A reference to a state 
-	 */
-	public State<int[][]> repeatedState(State<int[][]> newState)
-	{
-		// begin search presuming new state
-		boolean exists = false;
-		State<int[][]> resultState = newState;
-		
-		// iterate through the state list;
-		// if it exists, report the existing and mark existence
-		for (State<int[][]> currState : states)
-			if (sameState(newState, currState)) 
-			{
-				resultState = currState;
-				exists = true;
-			}
-		
-		// if the new state was not found, add it to the state list
-		if (!exists)
-			states.add(newState);
-		
-		return resultState;
-	}
-	
-	/**
 	 * Compares two states according to their info.
 	 * 
 	 * @param state1 
@@ -201,11 +165,12 @@ public class Generatrix {
 		return true;
 	}
 	
-	public String toString(int nState)
+	public String toString(int hash)
 	{
-		State<int[][]> state = states.get(nState);
+		State<int[][]> state = statesMap.get(hash);
+		System.out.println(state);
 		
-		String 	s="State "+nState+"\n";
+		String 	s="";
 		
 		for(int i=0; i< state.info.length; i++)
 		{

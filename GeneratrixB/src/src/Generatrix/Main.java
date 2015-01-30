@@ -15,9 +15,9 @@ public class Main {
 		Generatrix theMatrix= new Generatrix(initialState);
 		
 		endTime= System.currentTimeMillis();
-		System.out.println("N States: "+theMatrix.states.size());
+		System.out.println("N States: "+theMatrix.statesMap.size());
 		System.out.println("Terminated in: "+(endTime-startTime));
-		
-		System.out.println(theMatrix.toString(0));
+			
+		System.out.println(theMatrix.toString(theMatrix.initialState));
 	}
 }
