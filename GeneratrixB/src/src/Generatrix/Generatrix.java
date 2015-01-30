@@ -29,14 +29,14 @@ public class Generatrix {
 		
 		while(!stack.isEmpty())
 		{
-			int[][] s= stack.pop();
-			State<int[][]> state= new State<int[][]>(s);
-			this.statesMap.put(hashCode(s), state);
+			int[][] currInfo= stack.pop();
+			State<int[][]> state= new State<int[][]>(currInfo);
+			this.statesMap.put(hashCode(currInfo), state);
 			
 			for(Operator op: Operator.values())
 			{
-				int[][] transition= createTransition(s, op);
-				//if the neighborn needs to be added to the list
+				int[][] transition= createTransition(currInfo, op);
+				//if the neighbor needs to be added to the list
 				if(transition!=null)
 				{
 					int hash= hashCode(transition);
@@ -199,7 +199,7 @@ public class Generatrix {
 		return s;
 	}
 	
-	public int hashCode(int[][] stateInfo)
+	public static int hashCode(int[][] stateInfo)
 	{
 		int n=0;
 		
