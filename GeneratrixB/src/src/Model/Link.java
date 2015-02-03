@@ -1,13 +1,13 @@
 package Model;
 
-public class Link{
+public class Link<T>{
 	
 	public Operator		operator;
-	public int			targetId;
+	public State<T>		target;
 	
-	public Link(Operator op, int targetId)
+	public Link(Operator op, State<T> target )
 	{
-		this.operator= op;
-		this.targetId= targetId;
+		this.operator	= op;
+		this.target		= target;
 	}
 }
