@@ -1,28 +1,51 @@
 package Model;
 
 public class Path {
-	
-	public Path 				origin;
+
+	public Path 				previous;
+	public Path 				next;
 	public Operator				op;
 	public State<?>				state;
 	
-	public Path( Path origin , Operator op , State<?> state) 
+	public Path()
 	{
-		this.origin		= origin;
+		previous 	= null;
+		next 		= null;
+		op 			= null;
+		state 		= null;
+	}
+	
+	public Path(Path origin , Operator op , State<?> state) 
+	{
+		this.previous	= origin;
 		this.op			= op;
 		this.state		= state;
 	}
 	
-	public String toString()
+	public String printBackward()
 	{
-		if(this.origin==null)
+		if(this.previous==null)
 			return "origin:\n"+this.state.toString();
 		else
-			return this.origin.toString()
+			return this.previous.printBackward()
 					+"\n" + op
 					+":\n" + this.state.toString();
-			
+	}
+	
+	public String printForward()
+	{
+		String s = "";
+		if (this.op == null)
+		{
+			s += "origin:\n"+this.state.toString();
+			s += this.next.printForward();
+		}
+		else
+		{
+			s += "\n" + op +":\n" + this.state.toString();
+			s += this.next.printForward();
+		}
 		
-		
+		return s;
 	}
 }

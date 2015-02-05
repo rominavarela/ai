@@ -10,7 +10,7 @@ public class Main {
 	public static void main(String args[])
 	{
 		//System.out.println("Terminated in: "+combinationsTest()+" ms");
-		System.out.println("Terminated in: "+dfsTest()+" ms");
+		System.out.println("Terminated in: "+bfsTest()+" ms");
 	}
 	
 	public static long combinationsTest()
@@ -46,8 +46,8 @@ public class Main {
 		
 		int[][] finalInfo = new int[][]{
 				{ 3, 1, 2 },
-				{ 6, 4, 5 },
-				{ 7, 0, 8 }
+				{ 0, 4, 5 },
+				{ 6, 7, 8 }
 		};
 		
 		MatrixState initialState = new MatrixState(initialInfo);
@@ -60,7 +60,37 @@ public class Main {
 		endTime= System.currentTimeMillis();
 		
 		//print results
-		System.out.println(path);
+		System.out.println(path.printBackward());
+		
+		return endTime-startTime;
+	}
+	
+	public static long bfsTest()
+	{
+		
+		int[][] initialInfo = new int[][]{
+				{ 0, 1, 2 },
+				{ 3, 4, 5 },
+				{ 6, 7, 8 }
+		};
+		
+		int[][] finalInfo = new int[][]{
+				{ 3, 1, 2 },
+				{ 6, 4, 5 },
+				{ 0, 7, 8 }
+		};
+		
+		MatrixState initialState = new MatrixState(initialInfo);
+		MatrixState finalState = new MatrixState(finalInfo);
+		
+		//test
+		long startTime= System.currentTimeMillis();
+		long endTime;
+		Generatrix.bfs(initialState, finalState);
+		endTime= System.currentTimeMillis();
+		
+		//print results
+		//System.out.println(path.printForward());
 		
 		return endTime-startTime;
 	}

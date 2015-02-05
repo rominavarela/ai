@@ -7,6 +7,9 @@ public abstract class State <T> {
 	public int					hash;
 	public T					info;
 	private ArrayList<Link<T>>	links;
+	
+	public State<?>				bfsParent;
+	public Operator				bfsParentOp;
 
 	public State(T info)
 	{
