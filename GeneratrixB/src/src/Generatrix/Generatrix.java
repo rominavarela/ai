@@ -1,6 +1,5 @@
 package Generatrix;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -79,7 +78,7 @@ public class Generatrix {
 			boolean advanced= false;
 			
 			// para cada enlace del estado cabeza
-			for(Link<?> l: caminito.state.links())
+			for(Link<?> l: caminito.state.heuristic(targetState.hash))
 			{
 				// si ya visistaste, saltalo
 				if(visitedMap.containsKey(l.target.hash))
@@ -127,7 +126,7 @@ public class Generatrix {
 			
 			// para cada link del estado actual
 			// añadir el info del estado objetivo a la cola
-			for (Link<?> currLink : currState.links())
+			for (Link<?> currLink : currState.heuristic(targetState.hash))
 			{
 				// obten el estado objetivo
 				State<?> currTargetState = statesMap.get(currLink.target.hash);

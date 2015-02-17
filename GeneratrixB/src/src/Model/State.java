@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public abstract class State <T> {
 	
@@ -21,6 +22,7 @@ public abstract class State <T> {
 	public 		abstract 	int 				hashCode(T info);
 	public 		abstract	Link <T>			transition(Operator o);
 	public 		abstract 	String 				toString();
+	public 		abstract 	Collection<Link<T>> 	heuristic(int target);
 	
 	public 		ArrayList<Link<T>>	links()
 	{
