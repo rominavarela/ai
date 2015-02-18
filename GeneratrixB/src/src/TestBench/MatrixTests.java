@@ -1,16 +1,16 @@
-package Generatrix;
+package TestBench;
 
 import java.util.HashMap;
 
 import Defaults.Defaults;
+import Generatrix.Generatrix;
 import MatrixImpl.MatrixHeuristic;
 import MatrixImpl.MatrixState;
 import Model.Heuristic;
 import Model.Path;
 import Model.State;
 
-public class Main {
-	
+public class MatrixTests {
 	/**
 	 ///////////////////////////////////////////////////////////////////////////////////////
 	 * CONFIGURATION
@@ -29,7 +29,7 @@ public class Main {
 			{ 3, 7, 0 }
 	});
 	
-	//static Heuristic<int[][]> 	heuristic	= Defaults.no_heuristic();
+	//static Heuristic<int[][]> 	heuristicB	= Defaults.no_heuristic();
 	static Heuristic<int[][]> 	heuristic	= MatrixHeuristic.matches();
 	
 	/**
