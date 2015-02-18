@@ -10,4 +10,10 @@ public class Link<T>{
 		this.operator	= op;
 		this.target		= target;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		return this.target.hashCode();
+	}
 }

@@ -1,9 +1,8 @@
-package Model;
+package MatrixImpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import Model.Link;
+import Model.Operator;
+import Model.State;
 
 public class MatrixState extends State<int[][]>{
 
@@ -90,32 +89,5 @@ public class MatrixState extends State<int[][]>{
 		}
 		return s;
 	}
-
-	@Override
-	public Collection<Link<int[][]>> heuristic(int targetHash) {
-		ArrayList<Link<int[][]>> orderMe = links();
-		
-		String th = ((Integer)targetHash).toString();
-		Map<Integer, Link<int[][]>> comparisonResults = new HashMap<Integer, Link<int[][]>>();
-		
-		for (Link<int[][]> possibleTarget : orderMe)
-		{
-			String ph = ((Integer)possibleTarget.hashCode()).toString();
-			System.out.println(th +", "+ ph);
-			int len= (ph.length() + th.length())/2;
-			int count = 0;
-			for (int i = 0; i < len; i++)
-				if (ph.charAt(i) == th.charAt(i))
-					count++;
-			
-			while (comparisonResults.containsKey(count))
-				count++;
-			System.out.println(count);
-			comparisonResults.put(count, possibleTarget);
-		}
-		
-		return comparisonResults.values();
-	}
-
 
 }

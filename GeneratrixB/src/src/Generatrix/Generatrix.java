@@ -1,10 +1,13 @@
 package Generatrix;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
+import Model.Heuristic;
 import Model.Link;
 import Model.Path;
 import Model.State;
@@ -67,10 +70,12 @@ public class Generatrix {
 	 * @param targetState
 	 * @return
 	 */
-	public static Path dfs(State<?> initialState, State<?> targetState)
+	@SuppressWarnings("unchecked")
+	public static <T> Path<T> dfs(State<T> initialState, State<T> targetState, Heuristic<T> heuristic)
 	{
-		Path			caminito					= new Path(null, null, initialState);
-		HashMap<Integer, Boolean> 	visitedMap 		= new HashMap<Integer, Boolean>();
+		Path<T>					caminito	= new Path<T>(null, null, initialState);
+		ArrayList<Integer>		visitedMap	= new ArrayList<Integer>();
+		//Hashtable<Integer, Boolean> 	visitedMap 		= new Hashtable<Integer, Boolean>();
 		
 		// for each not-visited state
 		while(caminito.state.hash != targetState.hash )
@@ -78,14 +83,14 @@ public class Generatrix {
 			boolean advanced= false;
 			
 			// para cada enlace del estado cabeza
-			for(Link<?> l: caminito.state.heuristic(targetState.hash))
+			for(Link<?> l: heuristic.heuristic(caminito.state, targetState ) /*caminito.state.heuristic(targetState.hash)*/)
 			{
 				// si ya visistaste, saltalo
-				if(visitedMap.containsKey(l.target.hash))
+				if(visitedMap.contains(l.target.hash))
 					continue;
 				
-				caminito= new Path(caminito, l.operator, l.target);
-				visitedMap.put(l.target.hash, true);
+				caminito= new Path<T>(caminito, l.operator, (State<T>) l.target);
+				visitedMap.add(l.target.hash);
 				advanced=true;
 				break;
 			}
@@ -99,11 +104,48 @@ public class Generatrix {
 		return caminito;
 	}
 	
+	/**
+	 * Breath First Search
+	 * @param initialState
+	 * @param targetState
+	 * @return
+	 */
+	public static <T> Path<T> bfs(State<T> initialState, State<T> targetState, Heuristic<T> heuristic)
+	{
+		Queue<Path<T>>	 				caminitos			= new LinkedList<Path<T>>();
+		caminitos.add(new Path<T>(null, null, initialState));
+		
+		Hashtable<Integer, Boolean> 	visitedMap 			= new Hashtable<Integer, Boolean>();
+		
+		//while there is a path
+		while(!caminitos.isEmpty())
+		{
+			Path<T> caminito= caminitos.poll();
+			
+			//for every new branch
+			for(Link<T> l: heuristic.heuristic(caminito.state, targetState ))
+			{
+				//if we arrived to our destiny
+				if(l.target.hash == targetState.hash)
+					return new Path<>(caminito, l.operator, l.target);
+				
+				// if target is repeated, ignore it
+				if(visitedMap.containsKey(l.target.hash))
+					continue;
+				
+				visitedMap.put(l.target.hash, true);
+				caminitos.add(new Path<>(caminito, l.operator, l.target));
+			}
+		}
+		
+		return null;
+	}
+	
 	public static void bfs(State<?> initialState, State<?> targetState)
 	{
 		HashMap<Integer, State<?>> statesMap = StateMap(initialState);
 		
-		// calcula el hash del objetivo para saber si se encontró
+		// calcula el hash del objetivo para saber si se encontrï¿½
 		Integer targetHash = targetState.hash;
 		
 		Queue<State<?>> statesToProcess= new LinkedList<State<?>>();
@@ -125,12 +167,12 @@ public class Generatrix {
 				break;
 			
 			// para cada link del estado actual
-			// añadir el info del estado objetivo a la cola
-			for (Link<?> currLink : currState.heuristic(targetState.hash))
+			// aï¿½adir el info del estado objetivo a la cola
+			for (Link<?> currLink : currState.links())
 			{
 				// obten el estado objetivo
 				State<?> currTargetState = statesMap.get(currLink.target.hash);
-				// y si no ha sido visitado, añádelo a la cola
+				// y si no ha sido visitado, aï¿½ï¿½delo a la cola
 				if (!visitedMap.containsKey(currTargetState.hash))
 				{
 					statesToProcess.add(currTargetState);
@@ -152,73 +194,5 @@ public class Generatrix {
 			System.out.println(curr);
 			curr = curr.bfsParent;
 		}
-	}
-
-	/**
-	 * Depth First Search
-	 * @param initialState
-	 * @param targetState
-	 * @return
-	 */
-	public static Path bfs1(State<?> initialState, State<?> targetState)
-	{	
-		// indica el orden de procesamiento, en este caso de amplitud
-		Queue<State<?>> statesToProcess = new LinkedList<State<?>>();
-		// inserta el estado inicial
-		statesToProcess.add(initialState);
-		
-		// registra cuales ya fueron visitados
-		HashMap<Integer, Boolean> 	visitedMap 		= new HashMap<Integer, Boolean>();
-		
-		// mientras haya estados disponibles en donde buscar
-		while(!statesToProcess.isEmpty())
-		{
-			// obten el siguiente a analizar
-			State<?> currState = statesToProcess.poll();
-			
-			// IMPORTANTE! marcar el estado actual como visitado
-			visitedMap.put(currState.hash, true);
-
-			// si se encuentra, termina
-			if (currState.hash == targetState.hash)
-				break;
-			
-			// para cada link del estado actual
-			// añadir el estado objetivo a la cola
-			for (Link<?> currLink : currState.links())
-			{
-				// obten el estado objetivo
-				State<?> currTargetState = currLink.target;
-				
-				// y si no ha sido visitado, añádelo a la cola
-				if (!visitedMap.containsKey(currTargetState.hash))
-				{
-					statesToProcess.add(currTargetState);
-					// y marca el nodo actual como padre del nodo objetivo
-					currTargetState.bfsParent = currState;
-					currTargetState.bfsParentOp = currLink.operator;
-				}
-			}
-		}
-
-		initialState.bfsParent = null;
-		// encuentra el nodo objetivo
-		State<?> curr = targetState;
-		Path caminito = new Path();
-		caminito.state = targetState;
-		caminito.op = targetState.bfsParentOp;
-		// mientras no te pases del origen
-		while (curr.bfsParent != null)
-		{
-			System.out.println(curr);
-			curr = curr.bfsParent;
-			Path newPath = new Path();
-			newPath.next = caminito;
-			newPath.state = curr;
-			newPath.op = curr.bfsParentOp;
-			caminito = newPath;
-		}
-		
-		return caminito;
 	}
 }

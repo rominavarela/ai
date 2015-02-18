@@ -2,27 +2,57 @@ package Generatrix;
 
 import java.util.HashMap;
 
-import Model.MatrixState;
+import Defaults.Defaults;
+import MatrixImpl.MatrixHeuristic;
+import MatrixImpl.MatrixState;
+import Model.Heuristic;
 import Model.Path;
 import Model.State;
 
 public class Main {
+	
+	/**
+	 ///////////////////////////////////////////////////////////////////////////////////////
+	 * CONFIGURATION
+	 */
+	static MatrixState 		initialState = new MatrixState(
+	new int[][]{
+			{ 0, 1, 2 },
+			{ 3, 4, 5 },
+			{ 6, 7, 8 }
+	});
+	
+	static MatrixState 		finalState 	 = new MatrixState(
+	new int[][]{
+			{ 1, 2, 5 },
+			{ 4, 6, 8 },
+			{ 3, 7, 0 }
+	});
+	
+	//static Heuristic<int[][]> 	heuristic	= Defaults.no_heuristic();
+	static Heuristic<int[][]> 	heuristic	= MatrixHeuristic.matches();
+	
+	/**
+	 ///////////////////////////////////////////////////////////////////////////////////////
+	 * MAIN
+	 */
 	public static void main(String args[])
 	{
-		System.out.println("Terminated in: "+combinationsTest()+" ms");
-		//System.out.println("Terminated in: "+bfsTest()+" ms");
+		//System.out.println("Terminated in: "+combinationsTest()+" ms");
+		System.out.println("Terminated in: "+dfsTest()+" ms");
 	}
 	
+	/**
+	 ///////////////////////////////////////////////////////////////////////////////////////
+	 * TESTS
+	 */
+	
+	/**
+	 * Creates and counts all possible states.
+	 * @return time in milliseconds
+	 */
 	public static long combinationsTest()
 	{
-		int[][] initialInfo = new int[][]{
-				{ 0, 1, 2 },
-				{ 3, 4, 5 },
-				{ 6, 7, 8 }
-		};
-		
-		MatrixState initialState = new MatrixState(initialInfo);
-		
 		//test
 		long startTime= System.currentTimeMillis();
 		long endTime;
@@ -37,63 +67,39 @@ public class Main {
 		return endTime-startTime;
 	}
 	
+	/**
+	 * Deph First Search Test
+	 * @return time in milliseconds
+	 */
 	public static long dfsTest()
 	{
-		
-		int[][] initialInfo = new int[][]{
-				{ 0, 1, 2 },
-				{ 3, 4, 5 },
-				{ 6, 7, 8 }
-		};
-		
-		int[][] finalInfo = new int[][]{
-				{ 1, 0, 2 },
-				{ 3, 4, 5 },
-				{ 6, 7, 8 }
-		};
-		
-		MatrixState initialState = new MatrixState(initialInfo);
-		MatrixState finalState = new MatrixState(finalInfo);
-		
-		//test
 		long startTime= System.currentTimeMillis();
 		long endTime;
-		Path path = Generatrix.dfs(initialState, finalState);
+		
+		Path<int[][]> path = Generatrix.dfs(initialState, finalState, heuristic);
+		
 		endTime= System.currentTimeMillis();
 		
 		//print results
-		System.out.println(path.printBackward());
-		
+		System.out.println(path);
 		return endTime-startTime;
 	}
 	
+	/**
+	 * Breath First Search Test
+	 * @return time in milliseconds
+	 */
 	public static long bfsTest()
 	{
-		
-		int[][] initialInfo = new int[][]{
-				{ 0, 1, 2 },
-				{ 3, 4, 5 },
-				{ 6, 7, 8 }
-		};
-		
-		int[][] finalInfo = new int[][]{
-				{ 3, 1, 2 },
-				{ 6, 4, 5 },
-				{ 0, 7, 8 }
-		};
-		
-		MatrixState initialState = new MatrixState(initialInfo);
-		MatrixState finalState = new MatrixState(finalInfo);
-		
-		//test
 		long startTime= System.currentTimeMillis();
 		long endTime;
-		Generatrix.bfs(initialState, finalState);
+		
+		Path<int[][]> path = Generatrix.bfs(initialState, finalState, heuristic);
+		
 		endTime= System.currentTimeMillis();
 		
 		//print results
-		//System.out.println(path.printForward());
-		
+		System.out.println(path);
 		return endTime-startTime;
 	}
 }
