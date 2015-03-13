@@ -1,0 +1,2 @@
+Bicycle:vehicleType=cycle,num_wheels=4
+Buscando:comida=true,amenaza=false
