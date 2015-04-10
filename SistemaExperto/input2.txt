@@ -1,2 +1,9 @@
-Bicycle:vehicleType=cycle,num_wheels=4
-Buscando:comida=true,amenaza=false
+Bicyle:vehicleType=cycle,num_wheels=2,motor=NO,vehicle=Bicycle
+Tricycle:vehicleType=cycle,num_wheels=3,motor=NO,vehicle=Tricycle
+Motorcycle:vehicleType=cycle,num_wheels=2,motor=YES,vehicle=Motorcycle
+SportsCar:vehicleType= automobile,size=small,num_doors=2,vehicle=SportsCar
+Sedan:vehicleType=automobile,size=medium,num_doors=4,vehicle=Sedan
+MiniVan:vehicleType=automobile,size=medium,num_doors=3,vehicle=MiniVan
+SUV:vehicleType=automobile,size=large,num_doors=4,vehicle=Sport_Utility_Vehicle
+Cycle:num_wheels<4,vehicleType=cycle
+Automobile:num_wheels=4,motor=yes,vechicleType=automobile
